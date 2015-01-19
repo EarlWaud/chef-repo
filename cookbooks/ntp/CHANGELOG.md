@@ -2,53 +2,6 @@ ntp Cookbook CHANGELOG
 ======================
 This file is used to list changes made in each version of the ntp cookbook.
 
-v1.6.8 (2014-12-04)
--------------------
-- **[PR #81](https://github.com/gmiranda23/ntp/pull/81)** - Update to berkshelf3
-
-v1.6.6 (2014-12-02)
--------------------
-- **[PR #76](https://github.com/gmiranda23/ntp/pull/76)** - Overhauled Testing
-- **[PR #68](https://github.com/gmiranda23/ntp/pull/68)** - Updated Leapseconds
-- **[PR #51](https://github.com/gmiranda23/ntp/pull/51)** - Berksfile source deprecation
-
-v1.6.5 (2014-09-25)
--------------------
-- Ensure that ntp version is captured
-
-v1.6.4 (2014-07-02)
--------------------
-- Leapseconds File Expired, update to 3626380800
-- **[COOK-3887](https://tickets.opscode.com/browse/COOK-3887)** - Trivial changes to achieve Gentoo support
-- **[COOK-1876](https://tickets.opscode.com/browse/COOK-1876)** - ntp leapfile assumes ntpd >= 4.2.6 syntax
-
-v1.6.2 (2014-03-19)
--------------------
-- [COOK-4162] - change "No NTP servers specified" message to :debug
-
-v1.6.0 (2014-02-21)
--------------------
-### Improvement
-- **[COOK-4346](https://tickets.opscode.com/browse/COOK-4346)** - Solaris 11 support for ntp
-- **[COOK-4339](https://tickets.opscode.com/browse/COOK-4339)** - Disable Monitoring by Default
-- **[COOK-3604](https://tickets.opscode.com/browse/COOK-3604)** - Enable listening on specific interfaces
-
-### Bug
-- **[COOK-4106](https://tickets.opscode.com/browse/COOK-4106)** - Check for default content in ntp.conf
-- **[COOK-4087](https://tickets.opscode.com/browse/COOK-4087)** - quote option in readme
-- **[COOK-3797](https://tickets.opscode.com/browse/COOK-3797)** - Cookbook fails to upload due to 1.9.x syntax
-- **[COOK-3023](https://tickets.opscode.com/browse/COOK-3023)** - NTP leapseconds file denied by Ubuntu apparmor profile
-
-
-v1.5.4 (2013-12-29)
--------------------
-[COOK-4007]- update to 3612902400
-
-
-v1.5.2
-------
-### Bug
-- **[COOK-3797](https://tickets.opscode.com/browse/COOK-3797)** - Add /spec to Chefignore
 
 v1.5.0
 ------

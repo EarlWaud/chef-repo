@@ -22,7 +22,7 @@
 #
 
 # default attributes for all platforms
-default['ntp']['servers']   = [] # The default recipe sets a list of common NTP servers (COOK-1170)
+default['ntp']['servers']   = []
 default['ntp']['peers'] = []
 default['ntp']['restrictions'] = []
 
@@ -40,16 +40,11 @@ default['ntp']['var_group'] = 'ntp'
 default['ntp']['leapfile'] = '/etc/ntp.leapseconds'
 default['ntp']['sync_clock'] = false
 default['ntp']['sync_hw_clock'] = false
-default['ntp']['listen'] = nil
-default['ntp']['listen_network'] = nil
-default['ntp']['apparmor_enabled'] = false
-default['ntp']['monitor'] = false
 
 # overrides on a platform-by-platform basis
 case node['platform_family']
 when 'debian'
   default['ntp']['service'] = 'ntp'
-  default['ntp']['apparmor_enabled'] = true if node['platform'] == 'ubuntu' && node['platform_version'].to_f >= 8.04
 when 'rhel'
   default['ntp']['packages'] = %w(ntp) if node['platform_version'].to_i < 6
 when 'windows'
@@ -68,18 +63,4 @@ when 'freebsd'
   default['ntp']['statsdir'] = "#{node['ntp']['varlibdir']}/ntpstats"
   default['ntp']['conf_group'] = 'wheel'
   default['ntp']['var_group'] = 'wheel'
-when 'gentoo'
-  default['ntp']['packages'] = %w(ntp)
-  default['ntp']['leapfile'] = "#{node['ntp']['varlibdir']}/ntp.leapseconds"
-when 'solaris2'
-  default['ntp']['packages'] = %w(ntp)
-  default['ntp']['service'] = 'ntp'
-  default['ntp']['varlibdir'] = '/var/ntp'
-  default['ntp']['conffile'] = '/etc/inet/ntp.conf'
-  default['ntp']['statsdir'] = "#{node['ntp']['varlibdir']}/ntpstats/"
-  default['ntp']['conf_owner'] = 'root'
-  default['ntp']['conf_group'] = 'root'
-  default['ntp']['var_owner'] = 'root'
-  default['ntp']['var_group'] = 'sys'
-  default['ntp']['leapfile'] = '/etc/inet/ntp.leap'
 end
