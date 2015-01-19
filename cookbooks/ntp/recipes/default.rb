@@ -28,7 +28,7 @@ else
     package ntppkg
   end
 
-  [node['ntp']['varlibdir'] node['ntp']['statsdir']].each do |ntpdir|
+  [node['ntp']['varlibdir'], node['ntp']['statsdir']].each do |ntpdir|
     directory ntpdir do
       owner node['ntp']['var_owner']
       group node['ntp']['var_group']
