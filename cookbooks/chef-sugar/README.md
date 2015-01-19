@@ -152,18 +152,6 @@ encrypted_data_bag_item('accounts', 'hipchat')
 encrypted_data_bag_item_for_environment('accounts', 'github')
 ```
 
-### Docker
-Chef Sugar looks for hints to see if the node being converged is a Docker container. When [Ohai supports checking other nodes](https://github.com/opscode/ohai/pull/428), Chef Sugar will automatically pick up the information.
-
-- `docker?`
-
-#### Examples
-```ruby
-template '/runme' do
-  only_if { docker?(node) }
-end
-```
-
 ### Attributes
 Chef Sugar adds more Chef-like DSL to attribute definitions. Instead of using the Ruby hash syntax, you can define attributes using nested namespaces. This DSL may be more friendly to non-Ruby developers. It can safely be mixed-and-matched with the standard syntax.
 
