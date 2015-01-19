@@ -3,13 +3,11 @@
 <%# Windows OHAI does not support determining if a host is a guest %>
 <% unless node['platform'] == 'windows' -%>
 <%# See http://www.vmware.com/vmtn/resources/238 p. 23 for explanation %>
-<%   if node['virtualization'] and node['virtualization']['role'] == 'guest' -%>
+<%   if node['virtualization']['role'] == 'guest' -%>
 <%  -%>tinker panic 0
 <%   end -%>
 <%-%>statsdir <%= node['ntp']['statsdir'] %>
-<%   if @ntpd_supports_native_leapfiles -%>
 <%-%>leapfile <%= node['ntp']['leapfile'] %>
-<%   end -%>
 <% end -%>
 driftfile <%= node['ntp']['driftfile'] %>
 
@@ -17,21 +15,6 @@ statistics loopstats peerstats clockstats
 filegen loopstats file loopstats type day enable
 filegen peerstats file peerstats type day enable
 filegen clockstats file clockstats type day enable
-
-<%# If the listen attribute is set on the node, then apply it %>
-<% unless node['ntp']['listen'].nil? -%>
-interface listen <%= node['ntp']['listen'] %>
-  <%# The service must always listen on localhost %>
-  <% if node['ntp']['listen'] != "127.0.0.1" -%>
-interface listen 127.0.0.1
-  <% end -%>
-<% end -%>
-
-<% if node['ntp']['monitor'] -%>
-enable monitor
-<% else -%>
-disable monitor
-<% end -%>
 
 <%# If ntp.peers is not empty %>
 <% unless node['ntp']['peers'].empty? -%>
@@ -70,7 +53,7 @@ restrict -6 ::1 nomodify
 <%# It is best practice to use a high stratum undisciplined clock, if you have a real CMOS clock %>
 <%# Except cases where you have a low stratum server, or a virtualized system without a real CMOS clock %>
 <% unless node['platform'] == 'windows' -%>
-<%   if not node['virtualization'] or node['virtualization']['role'] != 'guest' -%>
+<%   unless node['virtualization']['role'] == 'guest' -%>
 <%  -%>server  127.127.1.0 # local clock
 <%  -%>fudge   127.127.1.0 stratum 10
 <%   end -%>

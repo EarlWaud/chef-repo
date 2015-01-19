@@ -21,9 +21,6 @@
 if platform_family?('windows')
   include_recipe 'ntp::windows_client'
 else
-
-  ::Chef::Recipe.send(:include, Opscode::Ntp::Helper)
-
   node['ntp']['packages'].each do |ntppkg|
     package ntppkg
   end
@@ -40,10 +37,7 @@ else
     owner node['ntp']['conf_owner']
     group node['ntp']['conf_group']
     mode  '0644'
-    source 'ntp.leapseconds'
   end
-
-  include_recipe 'ntp::apparmor' if node['ntp']['apparmor_enabled']
 end
 
 unless node['ntp']['servers'].size > 0
@@ -53,26 +47,8 @@ unless node['ntp']['servers'].size > 0
     '2.pool.ntp.org',
     '3.pool.ntp.org'
   ]
-  Chef::Log.debug 'No NTP servers specified, using default ntp.org server pools'
+  log 'No NTP servers specified, using default ntp.org server pools'
 end
-
-if node['ntp']['listen'].nil? && !node['ntp']['listen_network'].nil?
-  if node['ntp']['listen_network'] == 'primary'
-    node.set['ntp']['listen'] = node['ipaddress']
-  else
-    require 'ipaddr'
-    net = IPAddr.new(node['ntp']['listen_network'])
-
-    node['network']['interfaces'].each do |iface, addrs|
-      addrs['addresses'].each do |ip, params|
-        addr = IPAddr.new(ip) if params['family'].eql?('inet') || params['family'].eql?('inet6')
-        node.set['ntp']['listen'] = addr if net.include?(addr)
-      end
-    end
-  end
-end
-
-leapfile_enabled = ntpd_supports_native_leapfiles
 
 template node['ntp']['conffile'] do
   source   'ntp.conf.erb'
@@ -80,9 +56,6 @@ template node['ntp']['conffile'] do
   group    node['ntp']['conf_group']
   mode     '0644'
   notifies :restart, "service[#{node['ntp']['service']}]"
-  variables(
-      :ntpd_supports_native_leapfiles => leapfile_enabled
-  )
 end
 
 if node['ntp']['sync_clock']
@@ -99,10 +72,11 @@ if node['ntp']['sync_clock']
   end
 end
 
-execute 'Force sync hardware clock with system clock' do
-  command 'hwclock --systohc'
-  action :run
-  only_if { node['ntp']['sync_hw_clock'] && !platform_family?('windows') }
+if node['ntp']['sync_hw_clock'] && ! platform_family?('windows')
+  execute 'Force sync hardware clock with system clock' do
+    command 'hwclock --systohc'
+    action :run
+  end
 end
 
 service node['ntp']['service'] do
